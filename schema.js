@@ -1,46 +1,27 @@
 const graphql = require("graphql");
 
+const { GraphQLObjectType, GraphQLSchema } = graphql;
+const studentsList = require("./component/student/studentController/Query");
+
 const {
-  GraphQLObjectType,
-  GraphQLSchema,
-  GraphQLInt,
-  GraphQLString,
-  GraphQLList,
-} = graphql;
+  addStudent,
+  updateStudent,
+} = require("./component/student/studentController/Mutation");
 
-const userType = new GraphQLObjectType({
-  name: "user",
-  fields: () => ({
-    id: { type: GraphQLInt },
-    name: { type: GraphQLString },
-    email: { type: GraphQLString },
-    phone: { type: GraphQLString },
-  }),
-});
-
-const RootQuery = new GraphQLObjectType({
-  name:"xyz",
-  fields: {
-    codeImprove: {
-      type: new GraphQLList(userType),
-      resolve(parent, args) {
-        let data = [
-          {
-            id: 1,
-            name: "coder",
-            email: "coder@gmail.com",
-            phone: 03120000000,
-          },
-          {
-            id: 2,
-            name: "test",
-            email: "test@gmail.com",
-            phone: 03110000000,
-          },
-        ];
-        return data;
-      },
-    },
+const rootQuery = new GraphQLObjectType({
+  name: "testing",
+  fields:{
+    studentsList: studentsList,
   },
 });
-module.exports = new GraphQLSchema({ query: RootQuery });
+
+const mutation = new GraphQLObjectType({
+  name: "mutation",
+  fields:{
+    addStudent: addStudent,
+    updateStudent: updateStudent,
+  },
+});
+
+
+module.exports = new GraphQLSchema({ query: rootQuery, mutation: mutation });
